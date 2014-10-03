@@ -24,9 +24,18 @@ import pkg_resources
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8000)
-    parser.add_argument('--root', type=str, default='.')
+    parser.add_argument('-p', '--port', type=int, default=8000,
+                        help='port to bind to')
+    parser.add_argument('-r', '--root', type=str, default='.',
+                        help='directory to serve, defaults to current working directory')
+    parser.add_argument('-a', '--address', type=str, default='127.0.0.1',
+                        help='address to bind to')
+    parser.add_argument('-A', action='store_true',
+                        help='shortcut for --address 0.0.0.0')
     args = parser.parse_args()
+    address = args.address
+    if args.A:
+        address = '0.0.0.0'
 
     conf_template = pkg_resources.resource_string('nginc', 'nginx.conf')
     tmp = tempfile.mkdtemp(prefix='nginc')
@@ -36,7 +45,7 @@ def main():
         shutil.rmtree(tmp)
 
     root = os.path.abspath(args.root)
-    config = conf_template.format(tmp=tmp, root=root, port=args.port)
+    config = conf_template.format(tmp=tmp, root=root, port=args.port, address=address)
     conf_path = tmp + '/nginx.conf'
     conf_file = open(conf_path, 'w')
     conf_file.write(config)
