@@ -16,7 +16,9 @@ setuptools.setup(
         ],
     },
     url='https://github.com/FlorianLudwig/nginc',
+    license="http://www.apache.org/licenses/LICENSE-2.0",
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 2.7',
     ],
 )
