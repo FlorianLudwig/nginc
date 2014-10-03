@@ -15,6 +15,7 @@ setuptools.setup(
             'nginc = nginc:main',
         ],
     },
+    url='https://github.com/FlorianLudwig/nginc',
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
     ],
