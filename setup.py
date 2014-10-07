@@ -3,8 +3,8 @@ import setuptools
 
 setuptools.setup(
     name='nginc',
-    version='0.0.2',
-    desciption='run nginx from the commandline',
+    version='0.0.3',
+    description='run nginx from the commandline',
     author='Florian Ludwig',
     author_email='f.ludwig@greyrook.com',
     install_requires=['setuptools'],
