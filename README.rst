@@ -13,5 +13,5 @@ For more options see *nginc -h*
 Why?
 ----
 
-The python SimpleHTTPServer often comes quite handy.  But some cases it not enough.
+The python SimpleHTTPServer often comes quite handy.  But in some cases it is not enough.
 For example if you need concurrent requests or range requests.
