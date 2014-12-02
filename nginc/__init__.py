@@ -22,6 +22,29 @@ import argparse
 import pkg_resources
 
 
+def start(root, address='127.0.0.1', port=8000):
+    conf_template = pkg_resources.resource_string('nginc', 'nginx.conf')
+    tmp = tempfile.mkdtemp(prefix='nginc')
+
+    @atexit.register
+    def cleanup_tmp():
+        shutil.rmtree(tmp)
+
+    root = os.path.abspath(root)
+    config = conf_template.format(tmp=tmp, root=root, port=port, address=address)
+    conf_path = tmp + '/nginx.conf'
+    conf_file = open(conf_path, 'w')
+    conf_file.write(config)
+    conf_file.close()
+
+    proc = subprocess.Popen(['nginx', '-c', conf_path])
+    @atexit.register
+    def cleanup_proc():
+        proc.kill()
+
+    return proc
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int, default=8000,
@@ -37,22 +60,10 @@ def main():
     if args.A:
         address = '0.0.0.0'
 
-    conf_template = pkg_resources.resource_string('nginc', 'nginx.conf')
-    tmp = tempfile.mkdtemp(prefix='nginc')
+    proc = start(args.root, address, args.port)
 
-    @atexit.register
-    def cleanup():
-        shutil.rmtree(tmp)
-
-    root = os.path.abspath(args.root)
-    config = conf_template.format(tmp=tmp, root=root, port=args.port, address=address)
-    conf_path = tmp + '/nginx.conf'
-    conf_file = open(conf_path, 'w')
-    conf_file.write(config)
-    conf_file.close()
-
-    proc = subprocess.Popen(['nginx', '-c', conf_path])
     try:
         proc.wait()
     except KeyboardInterrupt:
         proc.kill()
+
