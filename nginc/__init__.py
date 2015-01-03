@@ -24,6 +24,7 @@ import pkg_resources
 
 def start(root, address='127.0.0.1', port=8000):
     conf_template = pkg_resources.resource_string('nginc', 'nginx.conf')
+    conf_template = conf_template.decode('utf-8')
     tmp = tempfile.mkdtemp(prefix='nginc')
 
     @atexit.register
