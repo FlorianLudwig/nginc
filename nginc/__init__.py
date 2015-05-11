@@ -42,7 +42,10 @@ def start(root, address='127.0.0.1', port=8000):
     proc = subprocess.Popen(['nginx', '-c', conf_path])
     @atexit.register
     def cleanup_proc():
-        proc.kill()
+        try:
+            proc.kill()
+        except OSError:
+            pass
 
     return proc
 
@@ -68,4 +71,3 @@ def main():
         proc.wait()
     except KeyboardInterrupt:
         proc.kill()
-
