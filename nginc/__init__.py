@@ -32,6 +32,7 @@ def start(root, address='127.0.0.1', port=8000):
         shutil.rmtree(tmp)
 
     root = os.path.abspath(root)
+    root = root.replace('"', '\\"')
     config = conf_template.format(tmp=tmp, root=root, port=port, address=address)
     conf_path = tmp + '/nginx.conf'
     conf_file = open(conf_path, 'w')
